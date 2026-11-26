@@ -1,0 +1,21 @@
+{
+  "name": "জিপিএ ক্যালকুলেটর",
+  "short_name": "GPA",
+  "description": "এসএসসি ও এইচএসসির ৫.০ স্কেলে জিপিএ ক্যালকুলেটর",
+  "start_url": "./index.html",
+  "scope": "./",
+  "id": "./index.html",
+  "display": "standalone",
+  "orientation": "portrait",
+  "lang": "bn",
+  "background_color": "#f1f5f3",
+  "theme_color": "#006a4e",
+  "icons": [
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

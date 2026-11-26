@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>জিপিএ ক্যালকুলেটর</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#006a4e">
+<link rel="icon" href="icon-512.png">
+<link rel="apple-touch-icon" href="icon-512.png">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Noto+Serif+Bengali:wght@600;700&display=swap">
+<style>
+:root{--bg:#f1f5f3;--card:#fff;--ink:#14241f;--mut:#5c6f68;--line:#dae3de;--field:#f6f9f7;--g:#006a4e;--g-ink:#fff;--res:#00553f;--resf:#8f1d2c;--ok-b:#d5eee3;--ok-t:#00573f;--md-b:#e6efd2;--md-t:#40600f;--lo-b:#fbe8c4;--lo-t:#774704;--f-b:#fbdadd;--f-t:#9b1c2e;--ring:#0a6cff;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0c1511;--card:#131f1a;--ink:#e7f0ec;--mut:#98ada4;--line:#26362f;--field:#0f1914;--g:#2fb88a;--g-ink:#04281d;--res:#0d4a38;--resf:#7a1a28;--ok-b:#0f3b2d;--ok-t:#7be0b6;--md-b:#26331a;--md-t:#c3dc92;--lo-b:#43300d;--lo-t:#f2c26b;--f-b:#471820;--f-t:#ff9aa6;--ring:#6aa8ff}}
+:root[data-theme="dark"]{--bg:#0c1511;--card:#131f1a;--ink:#e7f0ec;--mut:#98ada4;--line:#26362f;--field:#0f1914;--g:#2fb88a;--g-ink:#04281d;--res:#0d4a38;--resf:#7a1a28;--ok-b:#0f3b2d;--ok-t:#7be0b6;--md-b:#26331a;--md-t:#c3dc92;--lo-b:#43300d;--lo-t:#f2c26b;--f-b:#471820;--f-t:#ff9aa6;--ring:#6aa8ff}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.6 "Hind Siliguri","Noto Sans Bengali","Kalpurush",system-ui,sans-serif}
+header{max-width:1000px;margin:0 auto;padding:22px 16px 6px;display:flex;align-items:center;gap:12px}
+header svg{flex:none;border-radius:3px}
+h1{margin:0;font:700 1.45rem/1.3 "Noto Serif Bengali","Kalpurush",Georgia,serif}
+header p{margin:0;color:var(--mut);font-size:.88rem}
+main{max-width:1000px;margin:0 auto;padding:12px 16px 96px;display:grid;gap:16px;grid-template-columns:minmax(0,1fr)}
+#res{order:-1}
+@media(min-width:820px){main{grid-template-columns:minmax(0,1fr) 340px;align-items:start;padding-bottom:40px}#res{order:0;position:sticky;top:calc(16px + env(safe-area-inset-top,0px))}.bar{display:none}}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.ph{padding:14px 16px 10px}
+.ph h2{margin:0;font-size:1.05rem;font-weight:600}
+.cols,.row{display:grid;grid-template-columns:minmax(0,1fr) 64px 56px 32px 24px;gap:6px;align-items:center;padding:0 16px}
+.cols{color:var(--mut);font-size:.78rem;padding-top:8px;padding-bottom:8px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:var(--field)}
+.cols span:nth-child(n+2){text-align:center}
+.row{min-height:52px}
+.row+.row{border-top:1px solid var(--line)}
+input{font:inherit;color:var(--ink);min-width:0}
+input[type=text]{width:100%;border:0;background:transparent;padding:10px 0;font-weight:500;border-radius:4px}
+input[type=number]{width:100%;text-align:center;border:1px solid var(--line);background:var(--field);border-radius:8px;padding:8px 4px;font-variant-numeric:tabular-nums;-moz-appearance:textfield}
+input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
+input:focus-visible,button:focus-visible,summary:focus-visible{outline:2px solid var(--ring);outline-offset:2px}
+input[type=checkbox]{width:20px;height:20px;accent-color:var(--g);justify-self:center}
+.chip{justify-self:center;min-width:46px;text-align:center;border-radius:6px;padding:1px 6px;font-weight:700;font-size:.85rem;line-height:1.25;background:var(--field);color:var(--mut)}
+.chip small{display:block;font-weight:500;font-size:.68rem;opacity:.85}
+.chip.g-ok{background:var(--ok-b);color:var(--ok-t)}
+.chip.g-mid{background:var(--md-b);color:var(--md-t)}
+.chip.g-low{background:var(--lo-b);color:var(--lo-t)}
+.chip.g-f{background:var(--f-b);color:var(--f-t)}
+.x{background:none;border:0;color:var(--mut);font-size:1.25rem;line-height:1;cursor:pointer;border-radius:6px;padding:4px}
+.x:hover{color:var(--f-t)}
+.acts{display:flex;flex-wrap:wrap;gap:8px;padding:14px 16px;border-top:1px solid var(--line)}
+.b{font:inherit;font-size:.9rem;padding:9px 16px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer}
+.b.p{background:var(--g);border-color:var(--g);color:var(--g-ink);font-weight:600}
+.b.t{margin-left:auto;border-color:transparent;color:var(--mut)}
+.fn{margin:0;padding:0 16px 14px;color:var(--mut);font-size:.8rem}
+details{border-top:1px solid var(--line)}
+summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;padding:14px 16px;font-weight:600}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";color:var(--mut)}
+details[open] summary::after{content:"\2212"}
+table{width:calc(100% - 32px);margin:0 16px 14px;border-collapse:collapse;font-size:.88rem}
+th,td{text-align:center;padding:7px 4px;border-bottom:1px solid var(--line)}
+th{color:var(--mut);font-weight:500}
+#res{background:var(--res);color:#fff;border-radius:14px;padding:20px 20px 18px;transition:background .3s}
+body[data-state=fail] #res,body[data-state=fail] .bar{background:var(--resf)}
+.k{font-size:.85rem;opacity:.8}
+.big{display:flex;align-items:flex-end;gap:12px;margin:2px 0 16px}
+.gpa{font:700 4.2rem/1.2 "Noto Serif Bengali","Kalpurush",Georgia,serif}
+.badge{margin-bottom:12px;padding:2px 12px;border-radius:99px;background:rgba(255,255,255,.18);font-weight:600;font-size:.9rem}
+.ruler{position:relative;margin:4px 0 20px}
+.bands,.lbl{display:flex}
+.bands{height:10px;border-radius:5px;overflow:hidden}
+.bands i,.lbl span{flex:20}
+.bands i:nth-child(4),.bands i:nth-child(5),.lbl span:nth-child(4),.lbl span:nth-child(5){flex:10}
+.bands i:nth-child(1){background:#e58d96}
+.bands i:nth-child(2){background:#efb285}
+.bands i:nth-child(3){background:#ebd27e}
+.bands i:nth-child(4){background:#b5d48a}
+.bands i:nth-child(5){background:#6fbd92}
+.bands i:nth-child(6){background:#2f9a74}
+.lbl{margin-top:5px;font-size:.72rem;opacity:.8;text-align:center}
+#mk{display:none;position:absolute;top:-6px;width:3px;height:22px;border-radius:2px;background:#fff;transform:translateX(-50%);transition:left .35s cubic-bezier(.2,.8,.2,1)}
+.stats{margin:0;padding:0;list-style:none;border-top:1px solid rgba(255,255,255,.22)}
+.stats li{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.14);font-size:.9rem}
+.stats span{opacity:.75}
+#note{margin-top:12px;font-size:.88rem;min-height:1.4em;opacity:.92}
+.bar{position:fixed;left:0;right:0;bottom:0;display:flex;align-items:baseline;gap:10px;padding:10px 20px calc(10px + env(safe-area-inset-bottom,0px));background:var(--res);color:#fff;transition:transform .25s}
+.bar.off{transform:translateY(100%)}
+.bar b{font:700 1.5rem/1.3 "Noto Serif Bengali","Kalpurush",Georgia,serif}
+.bar i{margin-left:auto;font-style:normal;font-weight:700}
+@media(prefers-reduced-motion:reduce){#mk,.bar,#res{transition:none}}
+@media print{.acts,.x,.bar,details{display:none}body{background:#fff}#res{position:static;background:#fff;color:#000;border:1px solid #000}.bands{display:none}}
+</style>
+</head>
+<body>
+<header>
+<svg width="34" height="20" viewBox="0 0 34 20" aria-hidden="true"><rect width="34" height="20" rx="2.5" fill="#006a4e"/><circle cx="15" cy="10" r="5.6" fill="#f42a41"/></svg>
+<div><h1>জিপিএ ক্যালকুলেটর</h1><p>এসএসসি ও এইচএসসির ৫.০ স্কেলে</p></div>
+</header>
+<main>
+<section class="panel">
+  <div class="ph"><h2>বিষয় ও নম্বর</h2></div>
+  <div class="cols"><span>বিষয়</span><span>নম্বর</span><span>গ্রেড</span><span>ঐচ্ছিক</span><span></span></div>
+  <div id="rows"></div>
+  <div class="acts">
+    <button class="b p" id="add">বিষয় যোগ করুন</button>
+    <button class="b" id="clear">নম্বর মুছুন</button>
+    <button class="b t" id="print">প্রিন্ট</button>
+  </div>
+  <p class="fn">বাংলা ও ইংরেজি ২০০, ICT ৫০, বাকি বিষয় ১০০ নম্বরের। ঐচ্ছিক বিষয়ের ২.০০-এর উপরের পয়েন্ট মোট পয়েন্টে যোগ হয়। কোনো আবশ্যিক বিষয়ে F পেলে জিপিএ ০.০০ ধরা হয়।</p>
+  <details><summary>নম্বর থেকে গ্রেডের তালিকা</summary>
+    <table>
+      <tr><th>শতকরা নম্বর</th><th>গ্রেড</th><th>পয়েন্ট</th></tr>
+      <tr><td>৮০–১০০</td><td>A+</td><td>৫.০০</td></tr>
+      <tr><td>৭০–৭৯</td><td>A</td><td>৪.০০</td></tr>
+      <tr><td>৬০–৬৯</td><td>A-</td><td>৩.৫০</td></tr>
+      <tr><td>৫০–৫৯</td><td>B</td><td>৩.০০</td></tr>
+      <tr><td>৪০–৪৯</td><td>C</td><td>২.০০</td></tr>
+      <tr><td>৩৩–৩৯</td><td>D</td><td>১.০০</td></tr>
+      <tr><td>০–৩২</td><td>F</td><td>০.০০</td></tr>
+    </table>
+  </details>
+</section>
+<aside id="res" aria-live="polite">
+  <div class="k">আপনার জিপিএ</div>
+  <div class="big"><div class="gpa" id="gpa">০.০০</div><span class="badge" id="badge" style="display:none"></span></div>
+  <div class="ruler" aria-hidden="true">
+    <div class="bands"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+    <div class="lbl"><span>F</span><span>D</span><span>C</span><span>B</span><span>A-</span><span>A</span></div>
+    <div id="mk"></div>
+  </div>
+  <ul class="stats">
+    <li><span>গণনায় বিষয়</span><b id="sN">০</b></li>
+    <li><span>মোট পয়েন্ট</span><b id="sT">০.০০</b></li>
+    <li><span>ঐচ্ছিক বোনাস</span><b id="sE">০.০০</b></li>
+  </ul>
+  <div id="note"></div>
+</aside>
+</main>
+<div class="bar" aria-hidden="true"><span>জিপিএ</span><b id="bg">০.০০</b><i id="bl">–</i></div>
+<script>
+const bn=n=>Number(n).toLocaleString('bn-BD',{minimumFractionDigits:2,maximumFractionDigits:2});
+const bi=n=>Number(n).toLocaleString('bn-BD');
+function gradeOf(m){
+  if(m>=80)return{g:'A+',p:5,c:'g-ok'};if(m>=70)return{g:'A',p:4,c:'g-ok'};if(m>=60)return{g:'A-',p:3.5,c:'g-mid'};
+  if(m>=50)return{g:'B',p:3,c:'g-mid'};if(m>=40)return{g:'C',p:2,c:'g-low'};if(m>=33)return{g:'D',p:1,c:'g-low'};return{g:'F',p:0,c:'g-f'};
+}
+const letterOf=g=>g>=5?'A+':g>=4?'A':g>=3.5?'A-':g>=3?'B':g>=2?'C':g>=1?'D':'F';
+const rowsEl=document.getElementById('rows');
+let count=0;
+const FULL={'বাংলা':200,'ইংরেজি':200,'ICT':50};
+function addRow(name=''){
+  const full=FULL[name]||100;
+  count++;
+  const row=document.createElement('div');
+  row.className='row';
+  row.innerHTML=`<input type="text" placeholder="বিষয় ${bi(count)}" aria-label="বিষয়ের নাম">
+    <input type="number" inputmode="decimal" min="0" max="${full}" data-full="${full}" placeholder="০–${bi(full)}" aria-label="নম্বর">
+    <span class="chip">–</span>
+    <input type="checkbox" aria-label="ঐচ্ছিক বিষয়">
+    <button class="x" aria-label="বিষয় মুছুন">×</button>`;
+  row.querySelector('input[type=text]').value=name;
+  row.querySelector('.x').onclick=()=>{row.remove();calc()};
+  row.querySelector('input[type=checkbox]').onchange=e=>{
+    if(e.target.checked)rowsEl.querySelectorAll('input[type=checkbox]').forEach(c=>{if(c!==e.target)c.checked=false});
+    calc();
+  };
+  row.querySelector('input[type=number]').oninput=calc;
+  rowsEl.appendChild(row);
+}
+function calc(){
+  let total=0,n=0,fail=false,extra=0;
+  rowsEl.querySelectorAll('.row').forEach(row=>{
+    const v=row.querySelector('input[type=number]').value;
+    const chip=row.querySelector('.chip');
+    if(v===''){chip.className='chip';chip.textContent='–';return}
+    const full=+row.querySelector('input[type=number]').dataset.full;
+    const m=Math.min(100,Math.max(0,parseFloat(v)/full*100));
+    const {g,p,c}=gradeOf(m);
+    chip.className='chip '+c;
+    chip.innerHTML=`${g}<small>${bn(p)}</small>`;
+    if(row.querySelector('input[type=checkbox]').checked){extra=Math.max(0,p-2)}
+    else{n++;total+=p;if(p===0)fail=true}
+  });
+  const note=document.getElementById('note'),badge=document.getElementById('badge');
+  let gpa=0;note.textContent=n?'':'নম্বর লিখলেই জিপিএ এখানে দেখা যাবে।';
+  if(n&&fail){note.textContent='একটি আবশ্যিক বিষয়ে ফেল করায় জিপিএ ০.০০ ধরা হয়েছে।'}
+  else if(n){gpa=Math.min(5,(total+extra)/n);if(extra>0){note.className='note i';note.textContent=`ঐচ্ছিক বিষয় থেকে ${bn(extra)} পয়েন্ট যোগ হয়েছে।`}}
+  document.getElementById('gpa').textContent=bn(gpa);
+  document.getElementById('bg').textContent=bn(gpa);
+  document.getElementById('bl').textContent=n?letterOf(gpa):'–';
+  document.body.dataset.state=n&&fail?'fail':'ok';
+  const mk=document.getElementById('mk');mk.style.display=n?'block':'none';mk.style.left=Math.min(99,Math.max(1,gpa/5*100))+'%';
+  document.getElementById('sN').textContent=bi(n);
+  document.getElementById('sT').textContent=bn(total);
+  document.getElementById('sE').textContent=bn(fail?0:extra);
+  if(n){const l=letterOf(gpa);badge.style.display='inline-block';badge.textContent='গ্রেড '+l;badge.className='badge '+gradeOf(gpa>=5?80:gpa>=4?70:gpa>=3.5?60:gpa>=3?50:gpa>=2?40:gpa>=1?33:0).c}
+  else badge.style.display='none';
+}
+const SUBJECTS=['বাংলা','ইংরেজি','সাধারণ গণিত','ধর্ম','ICT','পদার্থ বিজ্ঞান','রসায়ন','জীব বিজ্ঞান','BGS','উচ্চতর গণিত'];
+document.getElementById('add').onclick=()=>addRow();
+document.getElementById('clear').onclick=()=>{rowsEl.querySelectorAll('input[type=number]').forEach(i=>i.value='');calc()};
+document.getElementById('print').onclick=()=>window.print();
+SUBJECTS.forEach(addRow);
+calc();
+const bar=document.querySelector('.bar');
+if('IntersectionObserver' in window)new IntersectionObserver(e=>bar.classList.toggle('off',e[0].isIntersecting)).observe(document.getElementById('res'));
+if('serviceWorker' in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js'));
+</script>
+</body>
+</html>
